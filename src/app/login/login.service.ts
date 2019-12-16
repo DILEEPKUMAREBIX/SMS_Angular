@@ -7,8 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class LoginService {
 
-    url: string = 'http://localhost:8081';
-    baseUrl: string = 'http://localhost:8081/users/';
+    baseUrl: string = 'http://localhost:8080/';
     loggedInUser: any;
     constructor(private http: HttpClient) { }
 
@@ -17,22 +16,22 @@ export class LoginService {
             'Authorization': 'Basic ' + btoa('devglan-client:devglan-secret'),
             'Content-type': 'application/x-www-form-urlencoded'
         }
-        return this.http.post('http://localhost:8081/' + 'oauth/token', loginPayload, { headers });
+        return this.http.post(this.baseUrl + 'oauth/token', loginPayload, { headers });
     }
 
     validate(user) {
-        return this.http.post(this.url + '/api/login', user);
+        return this.http.post(this.baseUrl + 'login/login', user);
     }
 
     getUser(id) {
-        return this.http.get(this.url + '/api/user/' + id);
+        return this.http.get(this.baseUrl + 'login/user/' + id);
     }
 
     saveUser(loginUser) {
-        return this.http.post(this.url + '/api/register/', loginUser);
+        return this.http.post(this.baseUrl + 'login/user/', loginUser);
     }
 
     getUsers() {
         return this.http.get(this.baseUrl + 'user?access_token=' + JSON.parse(window.sessionStorage.getItem('token')).access_token);
-      }
+    }
 }

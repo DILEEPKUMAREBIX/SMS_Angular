@@ -30,43 +30,42 @@ export class LoginComponent {
 
   createForm() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       password: ['', [Validators.required]]
     });
   }
 
   createSignUpForm() {
     this.signUpForm = this.fb.group({
-      email: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       // password: ['', [Validators.required]],
       // confirm: ['', [Validators.required]]
-      password: ['Dil@763362', [Validators.required]],
-      confirm: ['Dil@763362', [Validators.required]]
+      password: ['', [Validators.required]],
+      confirm: ['', [Validators.required]]
     }
     );
   }
 
 
   login() {
-
     if (this.loginForm.invalid) {
       return;
     }
     const body = new HttpParams()
-      .set('username', this.loginForm.controls.email.value)
+      .set('username', this.loginForm.controls.username.value)
       .set('password', this.loginForm.controls.password.value)
       .set('grant_type', 'password');
 
     this.service.login(body.toString()).subscribe(data => {
       window.sessionStorage.setItem('token', JSON.stringify(data));
       console.log(window.sessionStorage.getItem('token'));
+      this.service.loggedInUser = this.loginForm.controls.username.value;
+      console.log(this.service.loggedInUser);
       this.router.navigate(['/', 'dashboard']);
     }, error => {
-        alert(error.error.error_description)
+      this.setMessage(error['error']['error_description'], 'danger');
+      this.loginForm.reset();
     });
-
-
-    
 
     // this.profileService.trim(this.loginForm);
     // this.clearMessage();
@@ -94,18 +93,18 @@ export class LoginComponent {
   }
 
   validate() {
-    if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.signUpForm.value.email))) {
-      this.setMessage("Please enter valid email address", 'danger');
-      return false;
-    }
-    else if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.signUpForm.value.password))) {
-      this.setMessage("Password should be atleast 8 characters long and should contain one number,one capital character and one special character", 'danger');
-      return false;
-    }
-    else if (this.signUpForm.value.password != this.signUpForm.value.confirm) {
-      this.setMessage("Passwords don't match", 'danger');
-      return false;
-    }
+    // if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.signUpForm.value.email))) {
+    //   this.setMessage("Please enter valid email address", 'danger');
+    //   return false;
+    // }
+    // else if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(this.signUpForm.value.password))) {
+    //   this.setMessage("Password should be atleast 8 characters long and should contain one number,one capital character and one special character", 'danger');
+    //   return false;
+    // }
+    // else if (this.signUpForm.value.password != this.signUpForm.value.confirm) {
+    //   this.setMessage("Passwords don't match", 'danger');
+    //   return false;
+    // }
     return true;
   }
 
