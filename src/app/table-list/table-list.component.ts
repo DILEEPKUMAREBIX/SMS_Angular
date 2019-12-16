@@ -7,6 +7,7 @@ import { UpgradeComponent } from '../upgrade/upgrade.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { OrganisationService } from './organisation.service';
+import { LoginService } from '../login/login.service';
 
 export interface DialogData {
   animal: string;
@@ -30,7 +31,7 @@ export class TableListComponent implements OnInit {
   organisations: any = [];
 
   constructor(public dialog: MatDialog, private modalService: NgbModal, private translate: TranslateService,
-    private organisationService: OrganisationService) {
+    private organisationService: OrganisationService, private loginService: LoginService) {
     translate.setDefaultLang('en');
 
   }
@@ -130,6 +131,7 @@ export class TableListComponent implements OnInit {
   }
 
   saveOrUpdate() {
+    this.organisationObj['user'] = this.loginService.loggedInUser;
     this.organisationService.createOrganisation(this.organisationObj).subscribe(
       (data: any) => {
         console.log(data);
