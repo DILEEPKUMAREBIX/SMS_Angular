@@ -33,6 +33,8 @@ import { MatDialogModule, MatFormFieldModule } from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 import { AdminLayoutModule } from './layouts/admin-layout/admin-layout.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { LoginComponent } from './login/login.component';
+import { LoginService } from './login/login.service';
 
 @NgModule({
   imports: [
@@ -57,9 +59,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent
+    AdminLayoutComponent,
+    LoginComponent
   ],
-  providers: [],
+  providers: [LoginService],
   bootstrap: [AppComponent],
   exports:[TranslateModule]
 })
