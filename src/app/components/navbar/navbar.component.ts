@@ -23,6 +23,11 @@ export class NavbarComponent implements OnInit {
         translate.setDefaultLang('en');
     }
 
+    logout() {
+        window.sessionStorage.setItem('token', "");
+        this.router.navigate(['/', 'login']);
+    }
+
     useLanguage(languageCode: string, language: string) {
         this.selectedLanguage = language;
         this.translate.use(languageCode);
