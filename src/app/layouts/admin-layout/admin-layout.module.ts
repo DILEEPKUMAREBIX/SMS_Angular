@@ -28,6 +28,7 @@ import {
 
 } from '@angular/material';
 import { OrganisationService } from '../../table-list/organisation.service';
+import { StrategyListComponent } from '../../strategy-list/strategy-list.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -54,6 +55,7 @@ import { OrganisationService } from '../../table-list/organisation.service';
     DashboardComponent,
     UserProfileComponent,
     TableListComponent,
+    StrategyListComponent,
     // ManageOrganisationDialog,
     TypographyComponent,
     IconsComponent,

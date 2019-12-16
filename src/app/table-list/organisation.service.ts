@@ -7,7 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 export class OrganisationService {
 
-    url: string = 'http://sms-env.av2vpzbwvh.us-east-1.elasticbeanstalk.com/api/';
+    // url: string = 'http://sms-env.av2vpzbwvh.us-east-1.elasticbeanstalk.com/api/';
+    url: string = 'http://localhost:5000/api/';
 
     constructor(private http: HttpClient) { }
 

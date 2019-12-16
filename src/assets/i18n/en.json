@@ -1,6 +1,7 @@
 {
     "sms": {
         "organisationTitle": "Organisation",
+        "strategyTitle": "Strategy",
         "search": "search..."
     }
 }

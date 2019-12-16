@@ -6,40 +6,34 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { UpgradeComponent } from '../upgrade/upgrade.component';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { OrganisationService } from './organisation.service';
-
-export interface DialogData {
-  animal: string;
-  name: string;
-}
-
+import { StrategyService } from './strategy-list.service';
 
 @Component({
-  selector: 'app-table-list',
-  templateUrl: './table-list.component.html',
-  styleUrls: ['./table-list.component.css'],
-  entryComponents: [UpgradeComponent]
+  selector: 'app-strategy-list',
+  templateUrl: './strategy-list.component.html',
+  styleUrls: ['./strategy-list.component.scss']
 })
-export class TableListComponent implements OnInit {
-  organisationObj: any = {};
+export class StrategyListComponent implements OnInit {
+
+  strategyObj: any = {};
   isNew
-  manageOrganisationHeading
+  manageStrategyHeading;
   animal: string;
   name: string;
   closeResult;
-  organisations: any = [];
+  strategies: any = [];
 
   constructor(public dialog: MatDialog, private modalService: NgbModal, private translate: TranslateService,
-    private organisationService: OrganisationService) {
+    private strategyService: StrategyService) {
     translate.setDefaultLang('en');
 
   }
 
   open(content, type: boolean, organisation?) {
     this.isNew = type;
-    this.manageOrganisationHeading = this.isNew
-      ? "Create SMS Organisation"
-      : "Update SMS Organisation";
+    this.manageStrategyHeading = this.isNew
+      ? "Create SMS Strategy"
+      : "Update SMS Strategy";
     if (this.isNew) {
       this.clearOrganisation();
     } else {
@@ -61,26 +55,26 @@ export class TableListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadOrganisations();
+    this.loadStrategies();
   }
 
   updateOrganisationFields(organisation) {
-    this.organisationObj["id"] = organisation.id;
-    this.organisationObj["orgNameEng"] = organisation.orgNameEng;
-    this.organisationObj["orgNameAr"] = organisation.orgNameAr;
-    this.organisationObj["recordStatus"] = organisation.recordStatus;
+    this.strategyObj["id"] = organisation.id;
+    this.strategyObj["strNameEng"] = organisation.strNameEng;
+    this.strategyObj["strNameAr"] = organisation.strNameAr;
+    this.strategyObj["recordStatus"] = organisation.recordStatus;
   }
 
   clearOrganisation() {
-    this.organisationObj["id"] = '';
-    this.organisationObj["orgNameEng"] = "";
-    this.organisationObj["orgNameAr"] = "";
-    this.organisationObj["recordStatus"] = "";
+    this.strategyObj["id"] = '';
+    this.strategyObj["strNameEng"] = "";
+    this.strategyObj["strNameAr"] = "";
+    this.strategyObj["recordStatus"] = "";
   }
 
-  deletionOrg: any;
+  deletionStr: any;
   openDelete(deleteConfirm, org) {
-    this.deletionOrg = org;
+    this.deletionStr = org;
     this.modalService
       .open(deleteConfirm, {
         ariaLabelledBy: "modal-basic-title"
@@ -106,9 +100,9 @@ export class TableListComponent implements OnInit {
   }
 
   onDeleteConfirmation() {
-    this.organisationService.deleteOrganisation(this.deletionOrg.id).subscribe(
+    this.strategyService.deleteStrategy(this.deletionStr.id).subscribe(
       (data: any) => {
-        this.loadOrganisations();
+        this.loadStrategies();
         this.modalService.dismissAll("on fail");
       },
       error => { }
@@ -119,10 +113,10 @@ export class TableListComponent implements OnInit {
     this.translate.use(language);
   }
 
-  loadOrganisations() {
-    this.organisationService.getAllOrganisations().subscribe(
+  loadStrategies() {
+    this.strategyService.getAllStrategies().subscribe(
       data => {
-        this.organisations = data;
+        this.strategies = data;
         // this.filteredProfiles = this.profiles;
       },
       error => { }
@@ -130,11 +124,11 @@ export class TableListComponent implements OnInit {
   }
 
   saveOrUpdate() {
-    this.organisationService.createOrganisation(this.organisationObj).subscribe(
+    this.strategyService.createStrategy(this.strategyObj).subscribe(
       (data: any) => {
         console.log(data);
         this.modalService.dismissAll("on success");
-        this.loadOrganisations();
+        this.loadStrategies();
       },
       (error: any) => {
         console.log(error);
@@ -142,4 +136,5 @@ export class TableListComponent implements OnInit {
       }
     );
   }
+
 }

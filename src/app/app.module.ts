@@ -47,9 +47,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     AdminLayoutModule,
     MatFormFieldModule,  
     NgbModule,  
-    AgmCoreModule.forRoot({
-      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
-    }),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -60,7 +57,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent,
+    AdminLayoutComponent
   ],
   providers: [],
   bootstrap: [AppComponent],
