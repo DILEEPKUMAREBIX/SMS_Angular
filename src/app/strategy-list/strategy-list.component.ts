@@ -159,10 +159,10 @@ export class StrategyListComponent implements OnInit {
         this.myInputVariable.nativeElement.value = "";
         // this.setMessage("Unsupported format trying to add. Supported formats are : .pdf, .jpg, .jpeg, .png", 'danger');
       }
-      else if (file.size >= 1048576) {
-        this.myInputVariable.nativeElement.value = "";
-        // this.setMessage("Maximum supported size is 1MB", 'danger');
-      }
+      // else if (file.size >= 1048576) {
+      //   this.myInputVariable.nativeElement.value = "";
+      //   // this.setMessage("Maximum supported size is 1MB", 'danger');
+      // }
       else {
         this.newProfileImage = file;
         this.fileName = file.name;
@@ -201,7 +201,7 @@ export class StrategyListComponent implements OnInit {
         this.loadStrategies();
       },
       err => {
-        alert("Error Adding the user: " + err.message);
+        console.log("Error Adding the user: " + err.message);
       }
     );
   }
