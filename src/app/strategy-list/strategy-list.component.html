@@ -37,6 +37,9 @@
                                         Update date
                                     </th>
                                     <th>
+                                        Image
+                                    </th>
+                                    <th>
                                         Actions
                                     </th>
                                 </thead>
@@ -62,6 +65,9 @@
                                         </td>
                                         <td>
                                             {{str.updateDate}}
+                                        </td>
+                                        <td>
+                                            <img [src]="getimageBlobUrl(str.image)" width="50" height="50" *ngIf="!isNew"/>
                                         </td>
                                         <td class="text-primary">
                                             <div class="example-button-row">

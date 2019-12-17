@@ -74,6 +74,11 @@ export class StrategyListComponent implements OnInit {
     this.loadOrganisations();
   }
 
+  getimageBlobUrl(image) {
+    let objectURL = 'data:image/png;base64,' + image;
+    return this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  }
+
   base64data: any
   updateOrganisationFields(organisation) {
     let objectURL = 'data:image/png;base64,' + organisation.image;
