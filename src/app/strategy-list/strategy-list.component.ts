@@ -1,12 +1,15 @@
 import {
-  Component, Inject,
-  OnInit
+  Component,
+  OnInit,
+  ViewChild
 } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UpgradeComponent } from '../upgrade/upgrade.component';
+import { MatDialog } from '@angular/material/dialog';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { StrategyService } from './strategy-list.service';
+import { OrganisationService } from 'app/table-list/organisation.service';
+import { LoginService } from 'app/login/login.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-strategy-list',
@@ -22,11 +25,23 @@ export class StrategyListComponent implements OnInit {
   name: string;
   closeResult;
   strategies: any = [];
+  organisations: any = [];
+
+  @ViewChild('myInput', { static: false }) myInputVariable: any;
 
   constructor(public dialog: MatDialog, private modalService: NgbModal, private translate: TranslateService,
-    private strategyService: StrategyService) {
+    private strategyService: StrategyService, private sanitizer: DomSanitizer, private organisationService: OrganisationService, private loginService: LoginService) {
     translate.setDefaultLang('en');
 
+  }
+
+  loadOrganisations() {
+    this.organisationService.getAllOrganisations().subscribe(
+      data => {
+        this.organisations = data;
+      },
+      error => { }
+    );
   }
 
   open(content, type: boolean, organisation?) {
@@ -56,13 +71,26 @@ export class StrategyListComponent implements OnInit {
 
   ngOnInit() {
     this.loadStrategies();
+    this.loadOrganisations();
   }
 
+  base64data: any
   updateOrganisationFields(organisation) {
+    var byteArray = new Uint8Array(organisation.image);
+    var blob: any = new Blob([byteArray], { type: 'application/pdf' });
+    var reader: any = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      this.base64data = reader.result;
+    }
     this.strategyObj["id"] = organisation.id;
     this.strategyObj["strNameEng"] = organisation.strNameEng;
     this.strategyObj["strNameAr"] = organisation.strNameAr;
     this.strategyObj["recordStatus"] = organisation.recordStatus;
+    this.strategyObj["image"] = organisation.image;
+    this.imageBlobUrl = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + this.base64data);
+    // this.createImageFromBlob(this.strategyObj["image"]);
+
   }
 
   clearOrganisation() {
@@ -123,16 +151,61 @@ export class StrategyListComponent implements OnInit {
     );
   }
 
+  fileName = '';
+  newProfileImage
+  supportedFormats = ['image/jpg', 'image/jpeg', 'image/png'];
+  setImage(files: FileList) {
+    this.fileName = '';
+    this.newProfileImage = null;
+    let file = files.item(0);
+    if (file && file.type) {
+      if (0 > this.supportedFormats.indexOf(file.type)) {
+        this.myInputVariable.nativeElement.value = "";
+        // this.setMessage("Unsupported format trying to add. Supported formats are : .pdf, .jpg, .jpeg, .png", 'danger');
+      }
+      else if (file.size >= 1048576) {
+        this.myInputVariable.nativeElement.value = "";
+        // this.setMessage("Maximum supported size is 1MB", 'danger');
+      }
+      else {
+        this.newProfileImage = file;
+        this.fileName = file.name;
+      }
+    }
+  }
+
+  imageBlobUrl: any;
+  createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+      this.imageBlobUrl = reader.result;
+    }, false);
+    if (image) {
+      reader.readAsDataURL(image);
+    }
+  }
+
   saveOrUpdate() {
-    this.strategyService.createStrategy(this.strategyObj).subscribe(
-      (data: any) => {
-        console.log(data);
+    // this.strategyService.createStrategy(this.strategyObj).subscribe(
+    //   (data: any) => {
+    //     console.log(data);
+    //     this.modalService.dismissAll("on success");
+    //     this.loadStrategies();
+    //   },
+    //   (error: any) => {
+    //     console.log(error);
+    //     this.modalService.dismissAll("on fail");
+    //   }
+    // );
+
+    this.strategyObj['user'] = this.loginService.loggedInUser.id;
+    this.strategyService.saveStrategyWithFile(this.strategyObj, this.newProfileImage).subscribe(
+      (res: any) => {
         this.modalService.dismissAll("on success");
         this.loadStrategies();
       },
-      (error: any) => {
-        console.log(error);
-        this.modalService.dismissAll("on fail");
+      err => {
+        alert("Error Adding the user: " + err.message);
       }
     );
   }

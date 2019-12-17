@@ -7,7 +7,8 @@
                         <h4 class="card-title ">{{ 'sms.strategyTitle' | translate }}</h4>
                         <!-- <p class="card-category"> Manage Organisations</p> -->
                         <div class="example-button-row">
-                            <button mat-raised-button color="primary" (click)="open(content, true)">Create new SMS Strategy</button>
+                            <button mat-raised-button color="primary" (click)="open(content, true)">Create new SMS
+                                Strategy</button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -64,8 +65,10 @@
                                         </td>
                                         <td class="text-primary">
                                             <div class="example-button-row">
-                                                <button mat-raised-button color="primary" (click)="open(content, false, org)">Edit</button>
-                                                <button mat-raised-button color="warn" (click)="openDelete(deleteConfirm, org)">Delete</button>
+                                                <button mat-raised-button color="primary"
+                                                    (click)="open(content, false, str)">Edit</button>
+                                                <button mat-raised-button color="warn"
+                                                    (click)="openDelete(deleteConfirm, str)">Delete</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -90,34 +93,47 @@
     </div>
     <div class="modal-body">
         <form>
-            <!-- <div class="form-row">
-              <div class="form-group col-md-6">
-                  <label for="inputEmail4">GRN Date</label>
-                  <input type="text" class="form-control" id="inputEmail4" placeholder="GRN Date">
-              </div>
-              <div class="form-group col-md-6">
-                  <label for="inputPassword4">GRN NO</label>
-                  <input type="text" class="form-control" id="inputPassword4" [(ngModel)]="transactionObj['grnNO']" [ngModelOptions]="{standalone: true}"
-                      placeholder="GRN NO">
-              </div>
-          </div> -->
             <div class="form-group">
                 <label for="inputAddress">
                     <b>Strategy Name English</b>
                 </label>
-                <input type="text" class="form-control" id="inputAddress" [(ngModel)]="strategyObj['strNameEng']" [ngModelOptions]="{standalone: true}">
+                <input type="text" class="form-control" id="inputAddress" [(ngModel)]="strategyObj['strNameEng']"
+                    [ngModelOptions]="{standalone: true}">
             </div>
             <div class="form-group">
                 <label for="inputAddress">
                     <b>Strategy Name Arabic</b>
                 </label>
-                <input type="text" class="form-control" id="inputAddress" [(ngModel)]="strategyObj['strNameAr']" [ngModelOptions]="{standalone: true}">
+                <input type="text" class="form-control" id="inputAddress" [(ngModel)]="strategyObj['strNameAr']"
+                    [ngModelOptions]="{standalone: true}">
             </div>
             <div class="form-group">
                 <label for="inputAddress">
                     <b>Record status</b>
                 </label>
-                <input type="text" class="form-control" id="inputAddress" [(ngModel)]="strategyObj['recordStatus']" [ngModelOptions]="{standalone: true}">
+                <input type="text" class="form-control" id="inputAddress" [(ngModel)]="strategyObj['recordStatus']"
+                    [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="form-group">
+                <label for="inputCity">Organisation</label>
+                <select class="form-control" id="sel1" [ngModelOptions]="{standalone: true}"
+                    [(ngModel)]="strategyObj['organisationId']">
+                    <option *ngFor="let org of organisations" [value]="org.id"> {{org.orgNameEng}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <div style="position:relative;">
+                    <a class='btn btn-danger' href='javascript:;'>
+                        Choose File...
+                        <input type="file" #myInput (change)="setImage($event.target.files)"
+                            accept=".pdf,.jpg,.jpeg,.png"
+                            style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;'
+                            name="file_source" size="40">
+                    </a>
+                    &nbsp;
+                    <span class='label label-danger' id="upload-file-info">{{fileName}}</span>
+                    <img [src]="imageBlobUrl"/>
+                </div>
             </div>
         </form>
     </div>

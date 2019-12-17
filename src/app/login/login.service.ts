@@ -27,6 +27,10 @@ export class LoginService {
         return this.http.get(this.baseUrl + 'login/user/' + id);
     }
 
+    getUserByUserName(username) {
+        return this.http.get(this.baseUrl + 'login/username/' + username);
+    }
+
     saveUser(loginUser) {
         return this.http.post(this.baseUrl + 'login/user/', loginUser);
     }

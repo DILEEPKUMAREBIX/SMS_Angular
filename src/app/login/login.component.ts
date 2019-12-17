@@ -57,37 +57,23 @@ export class LoginComponent {
     this.service.login(body.toString()).subscribe(data => {
       window.sessionStorage.setItem('token', JSON.stringify(data));
       console.log(window.sessionStorage.getItem('token'));
-      this.service.loggedInUser = this.loginForm.controls.username.value;
-      console.log(this.service.loggedInUser);
-      this.router.navigate(['/', 'dashboard']);
+      this.getUser();
     }, error => {
       this.setMessage(error['error']['error_description'], 'danger');
       this.loginForm.reset();
     });
-
-    // this.profileService.trim(this.loginForm);
-    // this.clearMessage();
-    // this.service.validate(this.loginForm.value).subscribe(
-    //   (data: any) => {
-    //     this.profileService.loggedInProfile = data;
-    //     this.getUser(data.id);
-    //   },
-    //   (error) => {
-    //     this.setMessage(error['error']['message'], 'danger');
-    //     this.loginForm.reset();
-    //   });
   }
 
-  getUser(id) {
-    // this.service.getUser(id).subscribe(
-    //   (data) => {
-    //     this.profileService.loggedInProfile = data;
-    //     this.router.navigate(['/', 'dashboard']);
-    //   },
-    //   (error) => {
-    //     this.profileService.isSubmitAction = true;
-    //     this.router.navigate(['/', 'profile']);
-    //   });
+  getUser() {
+    this.service.getUserByUserName(this.loginForm.controls.username.value).subscribe(
+      (data) => {
+        this.service.loggedInUser = data;
+        console.log(this.service.loggedInUser);
+        this.router.navigate(['/', 'dashboard']);
+      },
+      (error) => {
+        // this.router.navigate(['/', 'profile']);
+      });
   }
 
   validate() {
@@ -107,7 +93,6 @@ export class LoginComponent {
   }
 
   saveLogin() {
-    // this.profileService.trim(this.signUpForm);
     this.clearMessage();
     if (this.validate()) {
       this.service.saveUser(this.signUpForm.value).subscribe(

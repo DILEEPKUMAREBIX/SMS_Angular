@@ -131,7 +131,7 @@ export class TableListComponent implements OnInit {
   }
 
   saveOrUpdate() {
-    this.organisationObj['user'] = this.loginService.loggedInUser;
+    this.organisationObj['user'] = this.loginService.loggedInUser.id;
     this.organisationService.createOrganisation(this.organisationObj).subscribe(
       (data: any) => {
         console.log(data);
