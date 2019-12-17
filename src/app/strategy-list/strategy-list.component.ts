@@ -76,21 +76,17 @@ export class StrategyListComponent implements OnInit {
 
   base64data: any
   updateOrganisationFields(organisation) {
-    var byteArray = new Uint8Array(organisation.image);
-    var blob: any = new Blob([byteArray], { type: 'application/pdf' });
-    var reader: any = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = function () {
-      this.base64data = reader.result;
-    }
+    let objectURL = 'data:image/png;base64,' + organisation.image;
+    this.imageBlobUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+
+    console.log(this.imageBlobUrl)
+
     this.strategyObj["id"] = organisation.id;
     this.strategyObj["strNameEng"] = organisation.strNameEng;
     this.strategyObj["strNameAr"] = organisation.strNameAr;
     this.strategyObj["recordStatus"] = organisation.recordStatus;
     this.strategyObj["image"] = organisation.image;
-    this.imageBlobUrl = this.sanitizer.bypassSecurityTrustUrl('data:image/png;base64,' + this.base64data);
-    // this.createImageFromBlob(this.strategyObj["image"]);
-
+    this.strategyObj["organisationId"] = organisation.organisationId;
   }
 
   clearOrganisation() {
